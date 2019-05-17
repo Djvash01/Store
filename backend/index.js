@@ -29,6 +29,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/category'));
 
 //Static files
 app.use(express.static(path.join(__dirname, 'public')));
