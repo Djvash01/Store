@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const router = Router();
 const Category = require('../models/Category');
+const Product = require('../models/Product');
 
 router.get('/', async(req, res)=>{
     const category = await Category.find();
@@ -23,9 +24,21 @@ router.post('/',async(req, res)=>{
    
 });
 
-router.delete('/:id',async(req,res)=>{
-    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-    res.json(deletedCategory);
+router.delete('/:name',async(req,res)=>{
+    const products = await Product.findOne({'category.name':req.params.name});
+    console.log(products);
+    if(!products){
+        const deletedCategory = await Category.findOneAndDelete({name:req.params.name});
+        res.json(deletedCategory);
+    }else{
+        res.json({
+            'code':'1000',
+            'description':'La categoria no puede ser eliminada por que tiene items asociados.'
+        });
+    }
+    
+    
+    
 });
 
 module.exports = router;
