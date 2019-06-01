@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express');
+const cors= require('cors');
 const morgan = require('morgan');
 const multer = require('multer');
 const path = require('path');
@@ -16,6 +17,7 @@ app.set('port', process.env.PORT || 3000);
 
 
 //Middlewares
+app.use(cors());
 app.use(morgan('dev'));
 const storage = multer.diskStorage({
     destination: path.join(__dirname, 'public/uploads'),
