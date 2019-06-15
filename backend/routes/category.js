@@ -25,7 +25,7 @@ router.post('/',async(req, res)=>{
             'description':'Categoria ya existente'
         };
         errors.push(error);
-        res.json({errors});
+        res.json({'category':[], errors});
     }
    
 });
