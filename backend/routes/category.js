@@ -28,11 +28,11 @@ router.post('/',async(req, res)=>{
    
 });
 
-router.delete('/:name',async(req,res)=>{
-    const products = await Product.findOne({'category.name':req.params.name});
+router.delete('/:id',async(req,res)=>{
+    const products = await Product.findOne({'category':req.params.id});
    
     if(!products){
-        const category = await Category.findOneAndDelete({name:req.params.name});
+        const category = await Category.findByIdAndDelete(req.params.id);
         res.json({category,'error':{}});
     }else{
         error={

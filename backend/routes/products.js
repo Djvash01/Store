@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
 router.get('/', async(req, res) => {
     const products = await Product.find();
@@ -8,7 +9,7 @@ router.get('/', async(req, res) => {
 });
 
 router.post('/', async(req, res) => {
-    const { code, name, details, price, category, imagePath } = req.body;
+    const { code, name, details, price, category} = req.body;
     const newProduct = new Product({ code, name, details, price, category });
     await newProduct.save();
     res.json(newProduct);
