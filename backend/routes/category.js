@@ -2,6 +2,7 @@ const {Router} = require('express');
 const router = Router();
 const Category = require('../models/Category');
 const Product = require('../models/Product');
+const {Types} = require('mongoose');
 
 router.get('/', async(req, res)=>{
     const category = await Category.find();
@@ -29,11 +30,29 @@ router.post('/',async(req, res)=>{
 });
 
 router.delete('/:id',async(req,res)=>{
+
+    if(!Types.ObjectId.isValid(req.params.id)){
+        error={
+            'code':'1002',
+            'description':'El Id de la categoria no es valido'
+        };
+        res.json({'category':{},error });
+    }
+
     const products = await Product.findOne({'category':req.params.id});
-   
+    console.log(products);
+    
     if(!products){
         const category = await Category.findByIdAndDelete(req.params.id);
-        res.json({category,'error':{}});
+        if (Category) {
+            res.json({category,'error':{}});
+        } else {
+            error={
+                'code':'1001',
+                'description':'La categoria no puede ser eliminada porque no existe o ya fue eliminada.'
+            };
+            res.json({'category':{},error });
+        }
     }else{
         error={
             'code':'1000',
