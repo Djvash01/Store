@@ -37,29 +37,30 @@ router.delete('/:id',async(req,res)=>{
             'description':'El Id de la categoria no es valido'
         };
         res.json({'category':{},error });
-    }
-
-    const products = await Product.findOne({'category':req.params.id});
-    console.log(products);
-    
-    if(!products){
-        const category = await Category.findByIdAndDelete(req.params.id);
-        if (Category) {
-            res.json({category,'error':{}});
-        } else {
+    }else{
+        const products = await Product.findOne({'category':req.params.id});
+        if(!products){
+            const category = await Category.findByIdAndDelete(req.params.id);
+       
+            if (category) {
+                res.json({category,'error':{}});
+            } else {
+                error={
+                    'code':'1001',
+                    'description':'La categoria no puede ser eliminada porque no existe o ya fue eliminada.'
+                };
+                res.json({'category':{},error });
+            }
+        }else{
             error={
-                'code':'1001',
-                'description':'La categoria no puede ser eliminada porque no existe o ya fue eliminada.'
+                'code':'1000',
+                'description':'La categoria no puede ser eliminada por que tiene items asociados.'
             };
             res.json({'category':{},error });
         }
-    }else{
-        error={
-            'code':'1000',
-            'description':'La categoria no puede ser eliminada por que tiene items asociados.'
-        };
-        res.json({'category':{},error });
+
     }
+
     
     
     
